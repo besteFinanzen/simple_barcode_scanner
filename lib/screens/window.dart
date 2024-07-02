@@ -6,6 +6,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:simple_barcode_scanner/enum.dart';
 import 'package:webview_windows/webview_windows.dart';
 
+import '../constant.dart';
+
 class WindowBarcodeScanner extends StatefulWidget {
   final String lineColor;
   final String cancelButtonText;
@@ -136,7 +138,7 @@ class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
 
     try {
       await controller.initialize();
-      //await controller.loadUrl(getAssetFileUrl(asset: PackageConstant.barcodeFilePath));
+      await controller.loadUrl(getAssetFileUrl(asset: PackageConstant.barcodeFilePath));
 
       /// Listen to web to receive barcode
       controller.webMessage.listen((event) {
