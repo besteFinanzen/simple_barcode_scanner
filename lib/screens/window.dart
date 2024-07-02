@@ -35,6 +35,7 @@ class WindowBarcodeScanner extends StatefulWidget {
 class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
   late final WebviewController controller;
   bool isPermissionGranted = false;
+  double? height;
 
   @override
   void initState() {
@@ -42,7 +43,13 @@ class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
     controller = WebviewController();
     controller.loadingState.listen((state) async {
       if (state == LoadingState.navigationCompleted) {
-        print(await controller.executeScript("document.documentElement.scrollHeight"));
+        var x = await controller.executeScript("document.documentElement.scrollHeight");
+        final double? y = double.tryParse(x.toString());
+        if (context.mounted) {
+          setState(() {
+            height = y;
+          });
+        }
       }
     });
     _checkCameraPermission().then((granted) {
@@ -66,6 +73,7 @@ class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
       builder: (context, snapshot) {
         if (snapshot.hasData && snapshot.data != null) {
           return Webview(
+            height: 200,
             controller,
             permissionRequested: (url, permissionKind, isUserInitiated) =>
                 _onPermissionRequested(
