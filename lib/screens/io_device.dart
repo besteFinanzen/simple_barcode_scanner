@@ -16,6 +16,7 @@ class BarcodeScanner extends StatelessWidget {
   final bool? centerTitle;
   final Widget? child;
   final double? height;
+  final double? width;
   const BarcodeScanner({
     super.key,
     required this.lineColor,
@@ -26,7 +27,8 @@ class BarcodeScanner extends StatelessWidget {
     this.child,
     this.appBarTitle,
     this.centerTitle,
-    this.height
+    this.height,
+    this.width
   });
 
   @override
@@ -42,6 +44,7 @@ class BarcodeScanner extends StatelessWidget {
         appBarTitle: appBarTitle,
         centerTitle: centerTitle,
         height: height,
+        width: width,
       );
     } else {
       /// Scan Android and ios barcode scanner with flutter_barcode_scanner

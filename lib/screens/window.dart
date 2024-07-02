@@ -17,6 +17,7 @@ class WindowBarcodeScanner extends StatefulWidget {
   final String? appBarTitle;
   final bool? centerTitle;
   final double? height;
+  final double? width;
 
   const WindowBarcodeScanner({
     super.key,
@@ -26,6 +27,7 @@ class WindowBarcodeScanner extends StatefulWidget {
     required this.scanType,
     required this.onScanned,
     this.height,
+    this.width,
     this.appBarTitle,
     this.centerTitle,
   });
@@ -42,18 +44,6 @@ class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
   void initState() {
     super.initState();
     controller = WebviewController();
-    if (widget.height != null) {
-      controller.loadingState.listen((state) async {
-        if (state == LoadingState.navigationCompleted) {
-          var x = await controller.executeScript(
-              "document.documentElement.scrollWidth");
-          final double? y = double.tryParse(x.toString());
-          if (y == null) return;
-          await controller.executeScript("window.scrollTo(0,${(y/2).round()})");
-          //await controller.setZoomFactor(y/widget.height!);
-        }
-      });
-    }
     _checkCameraPermission().then((granted) {
       debugPrint("Permission is $granted");
       isPermissionGranted = granted;
