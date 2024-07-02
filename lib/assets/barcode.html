@@ -6,24 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
          /* In order to place the tracking correctly */
-         canvas.drawing, canvas.drawingBuffer {
-         position: absolute;
-         left: 0;
-         top: 0;
-         }
+        canvas.drawing, canvas.drawingBuffer {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
         body {
             overflow: hidden; /* Hide scrollbars */
         }
-         html, body {
-            height: 100%; /* IMPORTANT!!! Stretches viewport to 100% */
-            width: 100%;
-         }
+        body, html {
+            height: 1000px;
+            width: 1000px;
+        }
       </style>
     <script src="html5-qrcode.min.js"></script>
 </head>
 <body>
 <!-- Div to show the scanner -->
-<div id="reader" ></div>
+<div id="reader"></div>
 <script>
   //refer doc here https://github.com/mebjas/html5-qrcode
  const html5QrCode = new Html5Qrcode(
@@ -51,8 +51,8 @@
  const config = {
      fps: 10,
      qrbox: {
-         width: 280,
-         height: 280,
+         width: 200,
+         height: 200,
      },
      formatsToSupport: formatsToSupport
  };
