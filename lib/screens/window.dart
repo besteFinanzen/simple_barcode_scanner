@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -8,7 +7,7 @@ import 'package:simple_barcode_scanner/constant.dart';
 import 'package:simple_barcode_scanner/enum.dart';
 import 'package:webview_windows/webview_windows.dart';
 
-class WindowBarcodeScanner extends StatelessWidget {
+class WindowBarcodeScanner extends StatefulWidget {
   final String lineColor;
   final String cancelButtonText;
   final bool isShowFlashIcon;
@@ -29,55 +28,57 @@ class WindowBarcodeScanner extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    WebviewController controller = WebviewController();
-    bool isPermissionGranted = false;
+  State<WindowBarcodeScanner> createState() => _WindowBarcodeScannerState();
+}
 
+class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
+  late final WebviewController controller;
+  bool isPermissionGranted = false;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = WebviewController();
     _checkCameraPermission().then((granted) {
       debugPrint("Permission is $granted");
       isPermissionGranted = granted;
     });
+  }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(appBarTitle ?? kScanPageTitle),
-        centerTitle: centerTitle,
-        leading: IconButton(
-          onPressed: () {
-            /// send close event to web-view
-            controller.postWebMessage(json.encode({"event": "close"}));
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_ios),
-        ),
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: initPlatformState(
+        controller: controller,
       ),
-      body: FutureBuilder<bool>(
-          future: initPlatformState(
-            controller: controller,
-          ),
-          builder: (context, snapshot) {
-            if (snapshot.hasData && snapshot.data != null) {
-              return Webview(
-                controller,
-                permissionRequested: (url, permissionKind, isUserInitiated) =>
-                    _onPermissionRequested(
+      builder: (context, snapshot) {
+        if (snapshot.hasData && snapshot.data != null) {
+          return Webview(
+            controller,
+            permissionRequested: (url, permissionKind, isUserInitiated) =>
+                _onPermissionRequested(
                   url: url,
                   kind: permissionKind,
                   isUserInitiated: isUserInitiated,
                   context: context,
                   isPermissionGranted: isPermissionGranted,
                 ),
-              );
-            } else if (snapshot.hasError) {
-              return Center(
-                child: Text(snapshot.error.toString()),
-              );
-            }
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }),
-    );
+          );
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text(snapshot.error.toString()),
+          );
+        }
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      });
   }
 
   /// Checks if camera permission has already been granted
@@ -146,7 +147,7 @@ class WindowBarcodeScanner extends StatelessWidget {
               event['data'].isNotEmpty &&
               barcodeNumber == null) {
             barcodeNumber = event['data'];
-            onScanned(barcodeNumber!);
+            widget.onScanned(barcodeNumber!);
           }
         }
       });
