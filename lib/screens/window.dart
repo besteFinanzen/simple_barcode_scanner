@@ -72,17 +72,20 @@ class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
       ),
       builder: (context, snapshot) {
         if (snapshot.hasData && snapshot.data != null) {
-          return Webview(
-            height: 200,
-            controller,
-            permissionRequested: (url, permissionKind, isUserInitiated) =>
-                _onPermissionRequested(
-                  url: url,
-                  kind: permissionKind,
-                  isUserInitiated: isUserInitiated,
-                  context: context,
-                  isPermissionGranted: isPermissionGranted,
-                ),
+          return SizedBox(
+            key: const ValueKey("_ScannerWebview"),
+            child: Webview(
+              height: 200,
+              controller,
+              permissionRequested: (url, permissionKind, isUserInitiated) =>
+                  _onPermissionRequested(
+                    url: url,
+                    kind: permissionKind,
+                    isUserInitiated: isUserInitiated,
+                    context: context,
+                    isPermissionGranted: isPermissionGranted,
+                  ),
+            ),
           );
         } else if (snapshot.hasError) {
           return Center(
