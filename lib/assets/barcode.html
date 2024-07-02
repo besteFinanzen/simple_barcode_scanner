@@ -22,7 +22,8 @@
 <div id="reader" ></div>
 <script>
   //refer doc here https://github.com/mebjas/html5-qrcode
- const html5QrCode = new Html5Qrcode("reader");
+ const html5QrCode = new Html5Qrcode(
+  "reader", { formatsToSupport: [ Html5QrcodeSupportedFormats.QR_CODE ] });
  console.log("Starting SCANNING CODE");
  const qrCodeSuccessCallback = (decodedText, decodedResult) => {
      //html5QrCode.stop();
@@ -39,13 +40,17 @@
      }
 
  };
+
+ const formatsToSupport = [
+  Html5QrcodeSupportedFormats.QR_CODE,
+];
  const config = {
      fps: 10,
      qrbox: {
          width: 280,
-         height: 120,
-         aspectRatio: 1.7777778
-     }
+         height: 280,
+     },
+     formatsToSupport: formatsToSupport
  };
 
  // If you want to prefer back camera
