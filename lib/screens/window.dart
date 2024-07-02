@@ -50,7 +50,7 @@ class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
           final double? y = double.tryParse(x.toString());
           if (y == null) return;
           await controller.executeScript("window.scrollTo(0,${(y/2).round()})");
-          await controller.setZoomFactor(y/widget.height!);
+          //await controller.setZoomFactor(y/widget.height!);
         }
       });
     }
