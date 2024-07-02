@@ -40,6 +40,11 @@ class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
   void initState() {
     super.initState();
     controller = WebviewController();
+    controller.loadingState.listen((state) async {
+      if (state == LoadingState.navigationCompleted) {
+        print(await controller.executeScript("document.documentElement.scrollHeight"));
+      }
+    });
     _checkCameraPermission().then((granted) {
       debugPrint("Permission is $granted");
       isPermissionGranted = granted;
