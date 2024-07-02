@@ -137,8 +137,7 @@ class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
 
     try {
       await controller.initialize();
-      await controller
-          .loadUrl(getAssetFileUrl(asset: PackageConstant.barcodeFilePath));
+      //await controller.loadUrl(getAssetFileUrl(asset: PackageConstant.barcodeFilePath));
 
       /// Listen to web to receive barcode
       controller.webMessage.listen((event) {
@@ -148,6 +147,7 @@ class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
               barcodeNumber == null) {
             barcodeNumber = event['data'];
             widget.onScanned(barcodeNumber!);
+            controller.reload();
           }
         }
       });
