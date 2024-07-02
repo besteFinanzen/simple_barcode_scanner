@@ -16,6 +16,7 @@ class WindowBarcodeScanner extends StatefulWidget {
   final Function(String) onScanned;
   final String? appBarTitle;
   final bool? centerTitle;
+  final double? height;
 
   const WindowBarcodeScanner({
     super.key,
@@ -24,6 +25,7 @@ class WindowBarcodeScanner extends StatefulWidget {
     required this.isShowFlashIcon,
     required this.scanType,
     required this.onScanned,
+    this.height,
     this.appBarTitle,
     this.centerTitle,
   });
@@ -35,23 +37,22 @@ class WindowBarcodeScanner extends StatefulWidget {
 class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
   late final WebviewController controller;
   bool isPermissionGranted = false;
-  double? height;
 
   @override
   void initState() {
     super.initState();
     controller = WebviewController();
-    controller.loadingState.listen((state) async {
-      if (state == LoadingState.navigationCompleted) {
-        var x = await controller.executeScript("document.documentElement.scrollHeight");
-        final double? y = double.tryParse(x.toString());
-        if (context.mounted) {
-          setState(() {
-            height = y;
-          });
+    if (widget.height != null) {
+      controller.loadingState.listen((state) async {
+        if (state == LoadingState.navigationCompleted) {
+          var x = await controller.executeScript(
+              "document.documentElement.scrollHeight");
+          final double? y = double.tryParse(x.toString());
+          if (y == null) return;
+          controller.setZoomFactor(y/widget.height!);
         }
-      }
-    });
+      });
+    }
     _checkCameraPermission().then((granted) {
       debugPrint("Permission is $granted");
       isPermissionGranted = granted;
@@ -75,7 +76,7 @@ class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
           return SizedBox(
             key: const ValueKey("_ScannerWebview"),
             child: Webview(
-              height: height,
+              height: widget.height,
               controller,
               permissionRequested: (url, permissionKind, isUserInitiated) =>
                   _onPermissionRequested(
