@@ -148,7 +148,7 @@ class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
               barcodeNumber == null) {
             barcodeNumber = event['data'];
             widget.onScanned(barcodeNumber!);
-            controller.reload();
+            //controller.reload();
           }
         }
       });
