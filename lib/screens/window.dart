@@ -51,7 +51,7 @@ class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
           if (y == null) return;
           await controller.executeScript("window.scrollTo(0,${(y/2).round()})");
           await controller.executeScript("document.body.style.overflow = 'hidden'");
-          controller.setZoomFactor(y/widget.height!);
+          await controller.setZoomFactor(y/widget.height!);
         }
       });
     }
