@@ -68,6 +68,7 @@ class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
             key: const ValueKey("_ScannerWebview"),
             child: Webview(
               height: widget.height,
+              width: widget.height,
               controller,
               permissionRequested: (url, permissionKind, isUserInitiated) =>
                   _onPermissionRequested(
