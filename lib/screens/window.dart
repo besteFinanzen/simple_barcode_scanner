@@ -75,7 +75,7 @@ class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
           return SizedBox(
             key: const ValueKey("_ScannerWebview"),
             child: Webview(
-              height: 200,
+              height: height,
               controller,
               permissionRequested: (url, permissionKind, isUserInitiated) =>
                   _onPermissionRequested(
