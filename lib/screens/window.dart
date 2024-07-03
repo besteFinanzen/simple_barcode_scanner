@@ -39,6 +39,8 @@ class WindowBarcodeScanner extends StatefulWidget {
 class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
   late final WebviewController controller;
   bool isPermissionGranted = false;
+  final GlobalKey key = GlobalKey();
+  bool sized = false;
 
   @override
   void initState() {
@@ -47,6 +49,15 @@ class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
     _checkCameraPermission().then((granted) {
       debugPrint("Permission is $granted");
       isPermissionGranted = granted;
+    });
+    controller.loadingState.listen((e) async {
+      if (e == LoadingState.navigationCompleted && mounted && !sized) {
+        sized = true;
+        double x = (key.currentContext?.findRenderObject() as RenderBox).size.height;
+        double y = await controller.executeScript("document.documentElement.scrollHeight");
+        controller.setZoomFactor(x/y);
+        controller.reload();
+      }
     });
   }
 
@@ -65,7 +76,7 @@ class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
       builder: (context, snapshot) {
         if (snapshot.hasData && snapshot.data != null) {
           return SizedBox(
-            key: const ValueKey("_ScannerWebview"),
+            key: key,
             child: Webview(
               height: widget.height,
               width: widget.height,
