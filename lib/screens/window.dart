@@ -55,7 +55,7 @@ class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
         sized = true;
         double x = (key.currentContext?.findRenderObject() as RenderBox).size.height;
         int y = await controller.executeScript("document.documentElement.scrollHeight");
-        controller.setZoomFactor((x/y));
+        controller.setZoomFactor((x/y)*1.34);
         controller.reload();
         print("resized");
       }
@@ -76,8 +76,9 @@ class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
       ),
       builder: (context, snapshot) {
         if (snapshot.hasData && snapshot.data != null) {
-          return SizedBox(
+          return AspectRatio(
             key: key,
+            aspectRatio: 1.34,
             child: Webview(
               height: widget.height,
               width: widget.height,
