@@ -53,11 +53,12 @@ class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
     controller.loadingState.listen((e) async {
       if (e == LoadingState.navigationCompleted && mounted && !sized) {
         sized = true;
-        double x = (key.currentContext?.findRenderObject() as RenderBox).size.height;
+        RenderBox? renderBox = key.currentContext?.findRenderObject() as RenderBox?;
+        if (renderBox == null) return;
+        double x = renderBox.size.height;
         int y = await controller.executeScript("document.documentElement.scrollHeight");
         controller.setZoomFactor((x/y)*1.34);
         controller.reload();
-        print("resized");
       }
     });
   }
