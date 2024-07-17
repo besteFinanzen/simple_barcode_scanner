@@ -167,8 +167,7 @@ class _WindowBarcodeScannerState extends State<WindowBarcodeScanner> {
       controller.webMessage.listen((event) {
         if (event['methodName'] == "successCallback") {
           if (event['data'] is String &&
-              event['data'].isNotEmpty &&
-              barcodeNumber == null) {
+              event['data'].isNotEmpty) {
             barcodeNumber = event['data'];
             widget.onScanned(barcodeNumber!);
             //controller.reload();
